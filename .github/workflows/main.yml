@@ -67,16 +67,9 @@ jobs:
     needs: [lint, test]
     if: ${{ always() }}
     runs-on: ubuntu-24.04
-    timeout-minutes: 5
+    timeout-minutes: 2
     steps:
-      - name: Collect reports
-        if: ${{ !cancelled() && needs.test.result != 'skipped' }}
-        uses: actions/download-artifact@v8.0.2
-        with:
-          pattern: test-report-*
-          path: reports
-      - name: Check all results
-        if: ${{ always() }}
+      - name: Require all checks to succeed
         env:
           LINT_RESULT: ${{ needs.lint.result }}
           TEST_RESULT: ${{ needs.test.result }}
